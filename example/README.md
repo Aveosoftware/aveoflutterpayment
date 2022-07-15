@@ -1,17 +1,9 @@
-# AveoFlutterPayment
-This package serves the purpose to simplify the payment gateway integration for flutter projects.
+# Payment module example
 
-## Included payment gateways
-* Razorpay
-___
-
-
-### RazorPay Config:
+## RazorPay Config:
 
 ### ***iOS***
-___
 update your Podfile
-
 
 **Set platform**:
 ```
@@ -29,7 +21,6 @@ post_install do |installer|
 end
 ```
 ### ***Android***
-___
 ```
 example/android/app/build.gradle:        
  android {  
@@ -44,9 +35,7 @@ example/android/app/build.gradle:
 }                                                                                           
 ```
 
-<!-- ## Stripe Config:
+## Stripe Config:
 
 ### ***iOS***
-add NSCameraUsageDescription in info.plist as Stripe requires it and it is not mentioned in Stripe's documentation -->
-
-
+add NSCameraUsageDescription in info.plist as Stripe requires it and it is not mentioned in Stripe's documentation
