@@ -37,5 +37,21 @@ example/android/app/build.gradle:
 
 ## Stripe Config:
 
+### ***Android***
+
+```
+example/android/app/build.gradle:        
+ android {  
+  .
+  .
+                                                                                     
+   defaultConfig {                                                                             
+     minSdkVersion 21                                                                          
+   }
+  .
+  .
+}                                                                                           
+```
+
 ### ***iOS***
 add NSCameraUsageDescription in info.plist as Stripe requires it and it is not mentioned in Stripe's documentation

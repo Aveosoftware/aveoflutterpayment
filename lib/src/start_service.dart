@@ -17,7 +17,8 @@ class AveoFlutterPaymentEvents {
 
 class AveoFlutterPayment {
   final Gateway gateway;
-  final Map<String, dynamic> options;
+  final Map<String, dynamic>? options;
+  final String? key;
   late emit.EventEmitter _eventEmitter;
   final missingKeyErrorResponse = AveoPaymentResponse(
       code: -1, message: 'Key in the options cannot be empty or null!');
@@ -33,7 +34,8 @@ class AveoFlutterPayment {
   /// ```
   AveoFlutterPayment({
     required this.gateway,
-    required this.options,
+     this.options,
+     this.key,
   }) {
     _eventEmitter = emit.EventEmitter();
   }
@@ -63,12 +65,15 @@ class AveoFlutterPayment {
     } else {
       if (gateway == Gateway.razorPay) {
         var razorPayService = RazorPayService(
-          options: options,
+          options: options!,
         );
         razorPayService
           ..openCheckout()
           ..on(AveoFlutterPaymentEvents.success, _successHandler)
           ..on(AveoFlutterPaymentEvents.error, _errorHandler);
+      }
+      if (gateway == Gateway.stripe) {
+        stripe(key:key!);
       }
     }
   }
@@ -86,8 +91,8 @@ class AveoFlutterPayment {
   //check if the options have key or not
   bool _isOptionValid() {
     bool isValid = false;
-    if (options.containsKey("key")) {
-      if ((options["key"] != null && options["key"] != "")) {
+    if (options!.containsKey("key")) {
+      if ((options!["key"] != null && options!["key"] != "")) {
         isValid = true;
       }
     }

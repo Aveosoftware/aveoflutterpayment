@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
+
   runApp(const MyApp());
 }
 
@@ -29,7 +30,8 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     var pay = AveoFlutterPayment(
       gateway: Gateway.razorPay,
-      options: options,
+      options: rzrPayOptions,
+      key:stripePublishableKey,
     );
     return Scaffold(
       appBar: AppBar(title: const Text('Payment eg')),

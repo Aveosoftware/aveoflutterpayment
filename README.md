@@ -4,7 +4,19 @@ This package serves the purpose to simplify the payment gateway integration for 
 ## Included payment gateways
 * Razorpay
 ___
-
+```
+example/android/app/build.gradle:        
+ android {  
+  .
+  .
+                                                                                     
+   defaultConfig {                                                                             
+     minSdkVersion 19                                                                          
+   }
+  .
+  .
+}                                                                                           
+```
 
 ### RazorPay Config:
 
@@ -37,16 +49,16 @@ example/android/app/build.gradle:
   .
                                                                                      
    defaultConfig {                                                                             
-     minSdkVersion 19                                                                          
+     minSdkVersion 21                                                                          
    }
   .
   .
 }                                                                                           
 ```
 
-<!-- ## Stripe Config:
+## Stripe Config:
 
 ### ***iOS***
-add NSCameraUsageDescription in info.plist as Stripe requires it and it is not mentioned in Stripe's documentation -->
+add NSCameraUsageDescription in info.plist as Stripe requires it and it is not mentioned in Stripe's documentation
 
 

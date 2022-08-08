@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   aveo_flutter_payment:
-    path: ../../aveo_flutter_payment
+    path: ../../aveoflutterpayment
   fluttertoast: ^8.0.9
 
   # The following adds the Cupertino Icons font to your application.
