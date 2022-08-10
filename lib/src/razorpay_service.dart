@@ -36,7 +36,7 @@ class RazorPayService {
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     razorPayServiceEmitter.emit(
       AveoFlutterPaymentEvents.success,
-      null,
+      Gateway.razorPay,
       AveoPaymentResponse(
         response: Resp.success,
         paymentId: "${response.paymentId}",
@@ -49,7 +49,7 @@ class RazorPayService {
   void _handlePaymentError(PaymentFailureResponse response) {
     razorPayServiceEmitter.emit(
       AveoFlutterPaymentEvents.error,
-      null,
+      Gateway.razorPay,
       AveoPaymentResponse(
         response: Resp.error,
         message: "${response.message}",
@@ -61,7 +61,7 @@ class RazorPayService {
   void _handleExternalWallet(ExternalWalletResponse response) {
     razorPayServiceEmitter.emit(
       AveoFlutterPaymentEvents.wallet,
-      null,
+      Gateway.razorPay,
       AveoPaymentResponse(
         wallet: "${response.walletName}",
       ),

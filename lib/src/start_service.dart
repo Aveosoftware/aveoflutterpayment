@@ -34,8 +34,8 @@ class AveoFlutterPayment {
   /// ```
   AveoFlutterPayment({
     required this.gateway,
-     this.options,
-     this.key,
+    this.options,
+    this.key,
   }) {
     _eventEmitter = emit.EventEmitter();
   }
@@ -73,7 +73,10 @@ class AveoFlutterPayment {
           ..on(AveoFlutterPaymentEvents.error, _errorHandler);
       }
       if (gateway == Gateway.stripe) {
-        stripe(key:key!);
+        stripeService()
+          ..stripe(key: key!)
+          ..on(AveoFlutterPaymentEvents.success, _successHandler)
+          ..on(AveoFlutterPaymentEvents.error, _errorHandler);
       }
     }
   }
