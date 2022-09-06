@@ -1,4 +1,4 @@
-package com.example.example
+package com.aveosoftware.garudauavlogs
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity

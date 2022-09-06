@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
-
   runApp(const MyApp());
+  AveoFlutterPayment(gateway: Gateway.inAppPurchase).init(
+      uid: 'UP0X2YxUtpdeiZ4PEU0b1RoptL53',
+      revanueCatApiKey: 'goog_cEZXOpzbmXxTOzovtKAoUztPtqT');
 }
 
 class MyApp extends StatelessWidget {
@@ -23,16 +25,40 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  late Package package;
+  late AveoFlutterPayment pay;
+  Future<void> getOffering() async {
+    Offerings offerings =
+        await AveoFlutterPayment(gateway: Gateway.inAppPurchase)
+            .fetchPurchase();
+    package = offerings.all.entries.first.value.monthly!;
+  }
+
+  @override
+  void initState() {
+    getOffering().then((value) {
+      pay = AveoFlutterPayment(
+        gateway: Gateway.inAppPurchase,
+        stripeOption: SetupPaymentSheetParameters(),
+        inappPurchaseOptions:
+            InappPurchaseOptions(isPro: false, package: package),
+        razorPayOptions: rzrPayOptions,
+        stripePublishableKey: stripePublishableKey,
+      );
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var pay = AveoFlutterPayment(
-      gateway: Gateway.razorPay,
-      options: rzrPayOptions,
-      key:stripePublishableKey,
-    );
     return Scaffold(
       appBar: AppBar(title: const Text('Payment eg')),
       body: Center(

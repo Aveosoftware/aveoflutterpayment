@@ -2,7 +2,9 @@
 // // All rights reserved.
 part of aveo_flutter_payment;
 
-class stripeService {
+class StripeService {
+  SetupPaymentSheetParameters stripeOptions;
+  StripeService({required this.stripeOptions});
   emit.EventEmitter stripeServiceEmitter = emit.EventEmitter();
 
   void on(String event, Function handler) {

@@ -23,7 +23,7 @@ void main() {
     mockRazorPayService = MockRazorPayService();
     sut = AveoFlutterPayment(
       gateway: Gateway.razorPay,
-      options: options,
+      razorPayOptions: options,
     );
   });
 
