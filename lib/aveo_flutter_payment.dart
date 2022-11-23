@@ -5,6 +5,8 @@ library aveo_flutter_payment;
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:aveo_flutter_payment/src/strip_web.dart' as stripe_web;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 export 'package:flutter_stripe/flutter_stripe.dart';
