@@ -35,25 +35,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late Package package;
   late AveoFlutterPayment pay;
-  Future<void> getOffering() async {
-    Offerings offerings =
-        await AveoFlutterPayment(gateway: Gateway.inAppPurchase)
-            .fetchPurchase();
-    package = offerings.all.entries.first.value.monthly!;
-  }
 
   @override
   void initState() {
-    getOffering().then((value) {
-      pay = AveoFlutterPayment(
-        gateway: Gateway.inAppPurchase,
-        stripeOption: SetupPaymentSheetParameters(),
-        inappPurchaseOptions:
-            InappPurchaseOptions(isPro: false, package: package),
-        razorPayOptions: rzrPayOptions,
-        stripePublishableKey: stripePublishableKey,
-      );
-    });
+    // getOffering().then((value) {
+
+    // });
     super.initState();
   }
 
@@ -64,6 +51,18 @@ class _HomeState extends State<Home> {
       body: Center(
           child: ElevatedButton(
         onPressed: () {
+          pay = AveoFlutterPayment(
+            gateway: Gateway.stripe,
+            stripeWebOptions: StripeWebOptions(
+                stripeWebCancelUrl: 'http://localhost:49813/#/',
+                stripeWebSucessUrl: 'http://localhost:49813/#/',
+                lineItem: Lineitem(
+                    productId: 'price_1M6wifSE9jF7kJL3vdv1tzmL', quantity: 1),
+                paymentMode: 'subscription'),
+            stripeOption: SetupPaymentSheetParameters(),
+            razorPayOptions: rzrPayOptions,
+            stripePublishableKey: stripePublishableKey,
+          );
           pay
             ..startPayment()
             ..on(AveoFlutterPaymentEvents.success, successHandler)

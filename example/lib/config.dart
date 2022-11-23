@@ -9,4 +9,5 @@ Map<String, dynamic> rzrPayOptions = {
   }
 };
 const stripePublishableKey =
-    "pk_test_51LIseNSGudWBU43p7GIpX1ocwB2B8T7y5XAyOYo2OIGqK0vCukiRydBVPt2cp3PLGtdeIzYe1nH3Cpv2jasjq3D900Ui4s0T5H";
+    "pk_test_51M6wZxSE9jF7kJL32Nz3aLJRpsBxXtdXZQXI13dbdRVANcwryXWeBI8mn7MlDffHLmknXkbhJ4GzDJzJR2XpNSzY00RKEgwKhT";
+    // "pk_test_51LIseNSGudWBU43p7GIpX1ocwB2B8T7y5XAyOYo2OIGqK0vCukiRydBVPt2cp3PLGtdeIzYe1nH3Cpv2jasjq3D900Ui4s0T5H";

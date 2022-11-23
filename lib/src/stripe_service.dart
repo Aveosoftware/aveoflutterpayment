@@ -4,7 +4,8 @@ part of aveo_flutter_payment;
 
 class StripeService {
   SetupPaymentSheetParameters stripeOptions;
-  StripeService({required this.stripeOptions});
+  StripeWebOptions? webOptions;
+  StripeService({required this.stripeOptions, this.webOptions});
   emit.EventEmitter stripeServiceEmitter = emit.EventEmitter();
 
   void on(String event, Function handler) {
@@ -34,46 +35,64 @@ class StripeService {
     }
   }
 
+  void redirectToCheckout(String key) {
+    stripe_web.Stripe(key).redirectToCheckout(stripe_web.CheckoutOptions(
+      lineItems: [
+        stripe_web.LineItem(
+          price: webOptions!.lineItem.productId,
+          quantity: webOptions!.lineItem.quantity,
+        )
+      ],
+      mode: webOptions!.paymentMode,
+      successUrl: webOptions!.stripeWebSucessUrl,
+      cancelUrl: webOptions!.stripeWebCancelUrl,
+    ));
+  }
+
   void stripe({required String key}) async {
-    WidgetsFlutterBinding.ensureInitialized();
-    Stripe.publishableKey = key;
-    Stripe.merchantIdentifier = 'any string works';
-    await Stripe.instance.applySettings();
-    String secret = await createPaymentIntent();
-    await Stripe.instance.initPaymentSheet(
-      paymentSheetParameters: SetupPaymentSheetParameters(
-        paymentIntentClientSecret: secret,
-        merchantDisplayName: 'Aveosoft Stripe Demo',
-        customerId: 'customer',
-        customerEphemeralKeySecret: 'ephemeralKey',
-        style: ThemeMode.dark,
-        testEnv: true,
-        merchantCountryCode: 'IN',
-      ),
-    );
-    try {
-      await Stripe.instance.presentPaymentSheet().then((value) {
-        Stripe.instance.retrievePaymentIntent(secret).then((value) {
-          stripeServiceEmitter.emit(
-            AveoFlutterPaymentEvents.success,
+    if (kIsWeb) {
+      redirectToCheckout(key);
+    } else {
+      WidgetsFlutterBinding.ensureInitialized();
+      Stripe.publishableKey = key;
+      Stripe.merchantIdentifier = 'any string works';
+      await Stripe.instance.applySettings();
+      String secret = await createPaymentIntent();
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: secret,
+          merchantDisplayName: 'Aveosoft Stripe Demo',
+          customerId: 'customer',
+          customerEphemeralKeySecret: 'ephemeralKey',
+          style: ThemeMode.dark,
+          // testEnv: true,
+          // merchantCountryCode: 'IN',
+        ),
+      );
+      try {
+        await Stripe.instance.presentPaymentSheet().then((value) {
+          Stripe.instance.retrievePaymentIntent(secret).then((value) {
+            stripeServiceEmitter.emit(
+              AveoFlutterPaymentEvents.success,
+              Gateway.stripe,
+              AveoPaymentResponse(
+                response: Resp.success,
+                paymentId: value.id,
+                signature: '',
+                orderId: "${value.paymentMethodId}",
+              ),
+            );
+          });
+        });
+      } on StripeException catch (e) {
+        stripeServiceEmitter.emit(
+            AveoFlutterPaymentEvents.error,
             Gateway.stripe,
             AveoPaymentResponse(
-              response: Resp.success,
-              paymentId: value.id,
-              signature: '',
-              orderId: "${value.paymentMethodId}",
-            ),
-          );
-        });
-      });
-    } on StripeException catch (e) {
-      stripeServiceEmitter.emit(
-          AveoFlutterPaymentEvents.error,
-          Gateway.stripe,
-          AveoPaymentResponse(
-            message: e.error.message,
-          ));
+              message: e.error.message,
+            ));
+      }
+      secret = '';
     }
-    secret = '';
   }
 }
