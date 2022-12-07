@@ -1,4 +1,23 @@
-# Payment module example
+# AveoPayment
+- Aveopayment helps to simplify the payment integration process.
+
+- [RazorPay Config : ](#razorpay-config)
+  - [ANDROID](#android)
+  - [IOS](#ios)
+  
+- [Stripe Config](#stripe-config)
+  - [ANDROID](#android-1)
+  - [IOS](#ios-1)
+- [Inapp Purchases Config](#inapppurchase-config)
+  - [ANDROID](#android-2)
+  - [IOS](#ios-2)
+- [Implementation Examples](#implementation-examples)
+  - [Stripe](#stripe)
+  - [RazorPay](#razorpay)
+  - [Inapp Purchase](#inapppurchase)
+
+
+
 
 ## RazorPay Config:
 
