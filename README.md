@@ -15,6 +15,7 @@
   - [Stripe](#stripe)
   - [RazorPay](#razorpay)
   - [Inapp Purchase](#inapppurchase)
+- [Why to use](#why-to-use)
 
 
 ## RazorPay Config:
@@ -195,3 +196,8 @@ AveoFlutterPayment pay = AveoFlutterPayment(
   }
 
 ```
+
+### Why to Use
+- Integrating payment interface in your app can be hard and time consuming if not done properly. 
+- While integrating payment module in your app you will always end up writing boilerplate code here and there but by using AveoPayment you will save your self from this.
+- By using AveoPayment you will save 80-85% of development time.
