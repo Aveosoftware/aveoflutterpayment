@@ -1,6 +1,6 @@
 # AveoFlutterPayment
-- Aveopayment helps to simplify the payment integration process.
-
+ Aveopayment helps to simplify the payment integration process.
+Configuring Payment module inside your app can be very lengthy process. For implementing below payment methods it can take you upto 40-50 hrs, but by using AveoflutterPayment it will come down to just 1 hr. 
 - [RazorPay Config : ](#razorpay-config)
   - [ANDROID](#android)
   - [IOS](#ios)
@@ -77,7 +77,10 @@ add NSCameraUsageDescription in info.plist as Stripe requires it and it is not m
 
 
 ## InAppPurchase Config
+AveoFlutterPayment is powered by RavenueCat.So for Ravenuecat dashboard configration please refer their documentation.
+### [Ravenuecat Documentation](https://www.revenuecat.com/docs/getting-started-1#section-configure-purchases)
 
+go to the above link and setup ravenuecat account and dashboard. add your Products and Entitlements there.
 ### ***Android***
 add the following permission inside your AndroidManifest.xml
 
@@ -200,4 +203,3 @@ AveoFlutterPayment pay = AveoFlutterPayment(
 ### Why to Use
 - Integrating payment interface in your app can be hard and time consuming if not done properly. 
 - While integrating payment module in your app you will always end up writing boilerplate code here and there but by using AveoPayment you will save your self from this.
-- By using AveoPayment you will save 80-85% of development time.
