@@ -24,34 +24,6 @@ class InappPurchaseOptions {
       {required this.package, required this.isPro, this.activePackage});
 }
 
-class Lineitem {
-  final String productId;
-
-  final int quantity;
-
-  Lineitem({required this.productId, required this.quantity});
-}
-
-class StripeWebOptions {
-  ///this url is required while using StripWeb after Sucessful payment user will be redirected to this path
-  final String stripeWebSucessUrl;
-
-  ///this url is required while using StripWeb after Unsucessful payment user will be redirected to this path
-  final String stripeWebCancelUrl;
-
-  ///mode of payment eg. 'payment','subscription' or 'setup'
-  final String paymentMode;
-
-  final Lineitem lineItem;
-
-  StripeWebOptions({
-    required this.stripeWebCancelUrl,
-    required this.stripeWebSucessUrl,
-    required this.lineItem,
-    required this.paymentMode,
-  });
-}
-
 class AveoFlutterPayment {
   final Gateway gateway;
 
@@ -88,10 +60,6 @@ class AveoFlutterPayment {
 
   ///this is required while using stripe.
   final String? stripePublishableKey;
-
-  /// this options is required while using Stripe on Web
-  final StripeWebOptions? stripeWebOptions;
-
   late emit.EventEmitter _eventEmitter;
   final missingKeyErrorResponse = AveoPaymentResponse(
       code: -1, message: 'Key in the options cannot be empty or null!');
@@ -111,7 +79,6 @@ class AveoFlutterPayment {
     this.razorPayOptions,
     this.inappPurchaseOptions,
     this.stripePublishableKey,
-    this.stripeWebOptions,
   }) {
     _eventEmitter = emit.EventEmitter();
   }
@@ -159,45 +126,47 @@ class AveoFlutterPayment {
   ///    ..on(AveoFlutterPaymentEvents.error, errorHandler);
   /// ```
   void startPayment() {
-    if (gateway == Gateway.razorPay) {
-      if (razorPayOptions == null) {
-        AssertionError('razorPayOptions can not be null while using RazorPay');
-      } else if (!_isOptionValid()) {
-        _eventEmitter.emit(
-            AveoFlutterPaymentEvents.error, this, missingKeyErrorResponse);
-      } else {
-        var razorPayService = RazorPayService(
-          options: razorPayOptions!,
-        );
-        razorPayService
-          ..openCheckout()
+    if (!_isOptionValid()) {
+      _eventEmitter.emit(
+          AveoFlutterPaymentEvents.error, this, missingKeyErrorResponse);
+    } else {
+      if (gateway == Gateway.razorPay) {
+        if (razorPayOptions == null) {
+          AssertionError(
+              'razorPayOptions can not be null while using RazorPay');
+        } else {
+          var razorPayService = RazorPayService(
+            options: razorPayOptions!,
+          );
+          razorPayService
+            ..openCheckout()
+            ..on(AveoFlutterPaymentEvents.success, _successHandler)
+            ..on(AveoFlutterPaymentEvents.error, _errorHandler);
+        }
+      }
+      if (gateway == Gateway.stripe) {
+        if (stripeOption == null || stripePublishableKey == null) {
+          AssertionError('stripeOption can not be null while using Stripe');
+        } else {
+          StripeService(stripeOptions: stripeOption!)
+            ..stripe(key: stripePublishableKey!)
+            ..on(AveoFlutterPaymentEvents.success, _successHandler)
+            ..on(AveoFlutterPaymentEvents.error, _errorHandler);
+        }
+      }
+      if (gateway == Gateway.inAppPurchase) {
+        if (inappPurchaseOptions == null) {
+          throw AssertionError(
+              'inappOption can not be null while using InAppPurchase');
+        }
+        InAppPurchaseService()
+          ..purchase(
+              isPro: inappPurchaseOptions!.isPro,
+              package: inappPurchaseOptions!.package,
+              activePackage: inappPurchaseOptions!.activePackage)
           ..on(AveoFlutterPaymentEvents.success, _successHandler)
           ..on(AveoFlutterPaymentEvents.error, _errorHandler);
       }
-    }
-    if (gateway == Gateway.stripe) {
-      if (stripeOption == null || stripePublishableKey == null) {
-        AssertionError('stripeOption can not be null while using Stripe');
-      } else {
-        StripeService(
-            stripeOptions: stripeOption!, webOptions: stripeWebOptions)
-          ..stripe(key: stripePublishableKey!)
-          ..on(AveoFlutterPaymentEvents.success, _successHandler)
-          ..on(AveoFlutterPaymentEvents.error, _errorHandler);
-      }
-    }
-    if (gateway == Gateway.inAppPurchase) {
-      if (inappPurchaseOptions == null) {
-        throw AssertionError(
-            'inappOption can not be null while using InAppPurchase');
-      }
-      InAppPurchaseService()
-        ..purchase(
-            isPro: inappPurchaseOptions!.isPro,
-            package: inappPurchaseOptions!.package,
-            activePackage: inappPurchaseOptions!.activePackage)
-        ..on(AveoFlutterPaymentEvents.success, _successHandler)
-        ..on(AveoFlutterPaymentEvents.error, _errorHandler);
     }
   }
 
